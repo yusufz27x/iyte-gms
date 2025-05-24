@@ -12,7 +12,15 @@ export async function GET() {
       },
     });
     console.log(`Found ${departments.length} departments in database`);
-    return NextResponse.json(departments, { status: 200 });
+    
+    const response = NextResponse.json(departments, { status: 200 });
+    
+    // Disable caching
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    response.headers.set('Pragma', 'no-cache');
+    response.headers.set('Expires', '0');
+    
+    return response;
   } catch (error) {
     console.error('Error fetching departments:', error);
     return NextResponse.json({ error: 'Failed to fetch departments' }, { status: 500 });
